@@ -1,7 +1,8 @@
 msg1="Press 'd' to move forward, 'a' to move back, 'w' to go to the start, 's' to go to the end. 'q' to quit:"
 msg2=Exiting.
 
-moves=("6 4 4 4")
+next_move=0
+uci_moves=("e2e4", "e7e5", "g1f3", "b8c6")
 
 # Define Unicode characters for chess pieces
 WHITE_PAWN="♙"
@@ -43,6 +44,19 @@ move_piece() {
     board[$start_index]=" "
 }
 
+uci_to_move() {
+    local move=$1
+    local start_col=$(($(printf "%d" "'${move:0:1}") - $(printf "%d" "'a")))
+    local start_row=$((8 - ${move:1:1}))
+    local end_col=$(($(printf "%d" "'${move:2:1}") - $(printf "%d" "'a")))
+    local end_row=$((8 - ${move:3:1}))
+    # printf "$start_row $start_col $end_row $end_col"
+
+
+    echo "$start_row $start_col $end_row $end_col"
+    #echo "6 4 4 4"
+}
+
 function display_board(){
   local i j
 
@@ -70,10 +84,18 @@ do
     "d")
     echo Move forward
 
-    for move in "${moves[@]}"; do
-      set -- $move
-      move_piece $1 $2 $3 $4
-    done
+    move=$(uci_to_move $uci_moves[$next_move])
+    echo $move
+    set -- $move
+    move_piece $1 $2 $3 $4
+    $move = $move + 1
+
+    # for uci_move in "${uci_moves[@]}"; do
+    #   move=$(uci_to_move $uci_move)
+    #   echo $move
+    #   set -- $move
+    #   move_piece $1 $2 $3 $4
+    # done
     ;;
 
     "a")
