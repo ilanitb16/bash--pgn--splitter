@@ -1,8 +1,6 @@
-msg1="Press 'd' to move forward, 'a' to move back, 'w' to go to the start, 's' to go to the end. 'q' to quit:"
+msg1="Press 'd' to move forward, 'a' to move back, 'w' to go to the start, 's' to go to the end. 'q' to quit: "
 msg2=Exiting.
-
 uci_moves=("e2e4" "e7e5" "g1f3" "b8c6")
-
 
 # Define Unicode characters for chess pieces
 WHITE_PAWN="♙"
@@ -19,16 +17,28 @@ WHITE_KING="♔"
 BLACK_KING="♚"
 
 # Initialize the chessboard
-board=(
-    $BLACK_ROOK $BLACK_KNIGHT $BLACK_BISHOP $BLACK_QUEEN $BLACK_KING $BLACK_BISHOP $BLACK_KNIGHT $BLACK_ROOK
-    $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN
-    "." "." "." "." "." "." "." "."
-    "." "." "." "." "." "." "." "."
-    "." "." "." "." "." "." "." "."
-    "." "." "." "." "." "." "." "."
-    $WHITE_PAWN $WHITE_PAWN $WHITE_PAWN $WHITE_PAWN $WHITE_PAWN $WHITE_PAWN $WHITE_PAWN $WHITE_PAWN
-    $WHITE_ROOK $WHITE_KNIGHT $WHITE_BISHOP $WHITE_QUEEN $WHITE_KING $WHITE_BISHOP $WHITE_KNIGHT $WHITE_ROOK
-)
+# board=(
+#     $BLACK_ROOK $BLACK_KNIGHT $BLACK_BISHOP $BLACK_QUEEN $BLACK_KING $BLACK_BISHOP $BLACK_KNIGHT $BLACK_ROOK
+#     $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN
+#     "." "." "." "." "." "." "." "."
+#     "." "." "." "." "." "." "." "."
+#     "." "." "." "." "." "." "." "."
+#     "." "." "." "." "." "." "." "."
+#     $WHITE_PAWN $WHITE_PAWN $WHITE_PAWN $WHITE_PAWN $WHITE_PAWN $WHITE_PAWN $WHITE_PAWN $WHITE_PAWN
+#     $WHITE_ROOK $WHITE_KNIGHT $WHITE_BISHOP $WHITE_QUEEN $WHITE_KING $WHITE_BISHOP $WHITE_KNIGHT $WHITE_ROOK
+# )
+
+
+function initialize_board(){
+  echo $BLACK_ROOK $BLACK_KNIGHT $BLACK_BISHOP $BLACK_QUEEN $BLACK_KING $BLACK_BISHOP $BLACK_KNIGHT $BLACK_ROOK
+  echo $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN
+  echo "." "." "." "." "." "." "." "."
+  echo "." "." "." "." "." "." "." "."
+  echo "." "." "." "." "." "." "." "."
+  echo "." "." "." "." "." "." "." "."
+  echo $WHITE_PAWN $WHITE_PAWN $WHITE_PAWN $WHITE_PAWN $WHITE_PAWN $WHITE_PAWN $WHITE_PAWN $WHITE_PAWN
+  echo $WHITE_ROOK $WHITE_KNIGHT $WHITE_BISHOP $WHITE_QUEEN $WHITE_KING $WHITE_BISHOP $WHITE_KNIGHT $WHITE_ROOK
+}
 
 # Function to move a piece
 move_piece() {
@@ -67,79 +77,85 @@ uci_to_back() {
     echo "$end_row $end_col $start_row $start_col"
 }
 
-function display_board(){
+display_board(){
+  # clear
+  echo "Move $next_move/${#uci_moves[@]}"
+
   local i j
 
   for ((i=0; i<8; i++)); do
       for ((j=0; j<8; j++)); do
           index=$((i * 8 + j))
-          printf "${board[$index]} "
+          echo -n "${board[$index]} "
       done
       echo
   done
 }
 
-next_move=0
-
-while true
-do
-  display_board
-  echo $msg1
-  read line
-  
-  case $line in
-    "q")
-    echo $msg2
-    exit 0
-    ;;
-
-    "d")
-    echo Move forward
-
+move_forward(){
+  if (($next_move < "${#uci_moves[@]}")); then
     uci_move=${uci_moves[$next_move]}
-    echo UCI MOVE: $uci_move
+    #echo UCI MOVE: $uci_move
 
     move=$(uci_to_move $uci_move)
-    echo $move
+    #echo $move
     set -- $move
     move_piece $1 $2 $3 $4
     next_move=$((next_move + 1))
-    echo $next_move
+  else
+    echo "No more moves available."
+  fi
+}
 
-    # for uci_move in "${uci_moves[@]}"; do
-    #   move=$(uci_to_move $uci_move)
-    #   echo $move
-    #   set -- $move
-    #   move_piece $1 $2 $3 $4
-    # done
-    ;;
-
-    "a")
-    echo Move back
-
+move_backward(){
+  if (($next_move > 0)); then
     next_move=$((next_move - 1))
 
     uci_move=${uci_moves[$next_move]}
-    echo UCI MOVE: $uci_move
+    #echo UCI MOVE: $uci_move
 
     move=$(uci_to_back $uci_move)
-    echo $move
+    #echo $move
     set -- $move
     move_piece $1 $2 $3 $4
-    echo $next_move
-    ;;
+  fi
+}
 
-    "w")
-    echo Go to the start
-    ;;
+play_to_end(){
+  start_new_game
+  
+  for uci_move in "${uci_moves[@]}"; do
+    move=$(uci_to_move $uci_move)
+    set -- $move
+    move_piece $1 $2 $3 $4
+  done
+}
 
-    "s")
-    echo Go to the start
-    ;;
+start_new_game(){
+  next_move=$((0))
+  board=($(initialize_board))
+}
 
-    *)
-    echo "Invalid input"
-    ;;
-  esac
+exit_game(){
+  echo $msg2
+  exit 0
+}
 
-done
+start_new_game
+
+while true
+  do
+    display_board
+    echo $msg1
+    read -n1 command
+    
+    case $command in
+      d) move_forward ;;
+      a) move_backward ;;
+      w) start_new_game ;;
+      s) play_to_end ;;
+      q) exit_game ;;
+      *) echo "Invalid key pressed: $command" ;;
+    esac
+
+  done
