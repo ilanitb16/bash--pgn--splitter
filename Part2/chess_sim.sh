@@ -1,6 +1,7 @@
+#!/bin/bash
 msg1="Press 'd' to move forward, 'a' to move back, 'w' to go to the start, 's' to go to the end. 'q' to quit: "
 msg2=Exiting.
-uci_moves=("e2e4" "e7e5" "g1f3" "b8c6")
+#uci_moves=("e2e4" "e7e5" "g1f3" "b8c6")
 
 # Define Unicode characters for chess pieces
 WHITE_PAWN="♙"
@@ -16,20 +17,31 @@ BLACK_QUEEN="♛"
 WHITE_KING="♔"
 BLACK_KING="♚"
 
-# Initialize the chessboard
-# board=(
-#     $BLACK_ROOK $BLACK_KNIGHT $BLACK_BISHOP $BLACK_QUEEN $BLACK_KING $BLACK_BISHOP $BLACK_KNIGHT $BLACK_ROOK
-#     $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN
-#     "." "." "." "." "." "." "." "."
-#     "." "." "." "." "." "." "." "."
-#     "." "." "." "." "." "." "." "."
-#     "." "." "." "." "." "." "." "."
-#     $WHITE_PAWN $WHITE_PAWN $WHITE_PAWN $WHITE_PAWN $WHITE_PAWN $WHITE_PAWN $WHITE_PAWN $WHITE_PAWN
-#     $WHITE_ROOK $WHITE_KNIGHT $WHITE_BISHOP $WHITE_QUEEN $WHITE_KING $WHITE_BISHOP $WHITE_KNIGHT $WHITE_ROOK
-# )
+# Print Python version and path
+# python3 -c "import sys; print('Python version:', sys.version); print('sys.path:', sys.path)"
 
+load_pgn() {
+    if [ ! -f "$1" ]; then
+        echo "File does not exist: $1"
+        exit 1
+    fi
 
-function initialize_board(){
+    echo "Metadata from PGN file:"
+    grep -E '^\[.*\]$' "$1"
+
+    moves_pgn=$(grep -E '^[0-9]+\.' "$1" | tr '\n' ' ')
+    # echo $moves_pgn
+    uci_moves=($(python parse_moves.py "$moves_pgn"))
+    echo "${uci_moves[@]}"
+
+    # for uci_move in "${uci_moves[@]}"; do
+    #   echo $uci_move
+    # done
+
+    #moves_history=("${uci_moves[@]}")
+}
+
+initialize_board(){
   echo $BLACK_ROOK $BLACK_KNIGHT $BLACK_BISHOP $BLACK_QUEEN $BLACK_KING $BLACK_BISHOP $BLACK_KNIGHT $BLACK_ROOK
   echo $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN $BLACK_PAWN
   echo "." "." "." "." "." "." "." "."
@@ -40,7 +52,6 @@ function initialize_board(){
   echo $WHITE_ROOK $WHITE_KNIGHT $WHITE_BISHOP $WHITE_QUEEN $WHITE_KING $WHITE_BISHOP $WHITE_KNIGHT $WHITE_ROOK
 }
 
-# Function to move a piece
 move_piece() {
     local start_row=$1
     local start_col=$2
@@ -123,7 +134,7 @@ move_backward(){
 
 play_to_end(){
   start_new_game
-  
+
   for uci_move in "${uci_moves[@]}"; do
     move=$(uci_to_move $uci_move)
     set -- $move
@@ -141,6 +152,12 @@ exit_game(){
   exit 0
 }
 
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <pgn-file>"
+    exit 1
+fi
+
+load_pgn "$1"
 start_new_game
 
 while true
