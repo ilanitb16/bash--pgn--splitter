@@ -1,0 +1,27 @@
+1,9d0
+< [Event "57th Capablanca Mem"]
+< [Site "Havana CUB"]
+< [Date "2024.05.04"]
+< [Round "2"]
+< [White "Quesada Perez,Luis Ernesto"]
+< [Black "Romanov,E"]
+< [Result "1/2-1/2"]
+< [WhiteElo "2567"]
+< [BlackElo "2598"]
+11c2
+< [ECO "D20"]
+---
+> [ECO "B90"]
+13,16c4,10
+< 1. d4 d5 2. c4 dxc4 3. e3 e5 4. Bxc4 exd4 5. exd4 Nf6 6. Nf3 Bd6 7. O-O O-O
+< 8. Nc3 Nc6 9. h3 h6 10. Qc2 Ne7 11. Ne5 c6 12. Qb3 Nfd5 13. Re1 Bc7 14.
+< Nxd5 cxd5 15. Bd3 Bb6 16. Nf3 Bf5 17. Bd2 Bxd3 18. Qxd3 Nc6 19. Re2 Re8 20.
+< Rae1 Rxe2 21. Rxe2 Qf6 22. Bc3 Qg6 23. Qd1 1/2-1/2
+---
+> 1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 Ng4 7. Bg5 h6 8.
+> Bh4 g5 9. Bg3 Bg7 10. h3 Nf6 11. Be2 O-O 12. h4 g4 13. O-O Nc6 14. Nxc6
+> bxc6 15. e5 Nh5 16. exd6 Nxg3 17. dxe7 Qxe7 18. fxg3 Rb8 19. Bxg4 f5 20.
+> Bf3 f4 21. gxf4 Rxb2 22. Ne2 Qxh4 23. c3 Qe7 24. Re1 Rd8 25. Qa4 Rdd2 26.
+> Qxc6 Bb7 27. Qc4+ Kh8 28. Bxb7 Qxb7 29. Rad1 Rxa2 30. Qe6 Qb5 31. Rxd2 Rxd2
+> 32. Nd4 Qc5 33. Qg6 Bxd4+ 34. cxd4 Qxd4+ 35. Kh1 Rd1 36. Qxh6+ Kg8 37. Qg6+
+> Kf8 38. Qf5+ 1-0
