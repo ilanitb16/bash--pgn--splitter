@@ -28,3 +28,4 @@ awk '/^\[Event/ { if (x) close(x); x=sprintf("%s/%s_%d.pgn", "'"$destination_dir
 echo "All games have been split and saved to '$destination_dir'."
 
 chmod +x pgn_split.sh
+
