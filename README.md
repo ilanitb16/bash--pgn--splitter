@@ -2,7 +2,8 @@
 This project encompasses three distinct tasks aimed at enhancing scripting and programming skills in Bash and C. Each task addresses a unique problem, providing practical solutions through well-structured code. Below is an overview of each task included in this project. Also, you can find all the testing information and results below.
 
 ## Overview
-1. PGN File Splitter Bash Script
+
+### PGN File Splitter Bash Script
 This task involves creating a Bash script named pgn_split.sh that processes chess games recorded in Portable Game Notation (PGN) format. The script splits multiple chess games contained in a single PGN file into separate files within a specified destination directory.
 
 ### Key Features
@@ -11,7 +12,7 @@ This task involves creating a Bash script named pgn_split.sh that processes ches
 - Ensures the destination directory exists or creates it if necessary.
 - Splits multiple chess games from the source PGN file into individual files.
 
-2. Chess Simulator Bash Script
+### Chess Simulator Bash Script
 This task involves developing a Bash script to simulate a chess game. The script allows users to input moves in algebraic notation, validates the moves, updates the board state, and displays the board after each move.
 
 ### Key Features
@@ -20,7 +21,7 @@ This task involves developing a Bash script to simulate a chess game. The script
 - Updates and displays the chessboard state after each move.
 - Detects and announces check, checkmate, and stalemate conditions.
 
-3. Custom Shell Implementation in C
+### Custom Shell Implementation in C
 This task involves creating a simple command-line interpreter named myshell.c. This custom shell handles basic Linux commands such as ls, cat, and sleep, without supporting pipes or complex commands. The shell is implemented in C using fork() and exec().
 
 ### Key Features
