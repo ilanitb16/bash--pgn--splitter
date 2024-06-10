@@ -1,9 +1,10 @@
 # BashScriptTask
 
 ## Testing Part 1 and 2
+This part contains an explanation of how to run the tests and the output I got on both machines before submssion.
 
 ### How to run the tests?
-1. Clone this repository 
+1. Clone this repository ```https://github.com/ilanitb16/BashScriptTask.git```
 2. ```cd Operation-Systems-Exercises/```
 3. ```cd Exercise\ 1/```
 4. ```cd tester```
